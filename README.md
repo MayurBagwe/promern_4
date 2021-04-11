@@ -7,7 +7,16 @@
 6. Mongo server will be started and run below commands to view records in the database
    - use inventoryManagement
    - db.products.find().pretty()
-7. Open the browser and navigate to [Inventory Management -  Application Home Page](http://localhost:8000/) and insert a record.
-8. GraphQL server [Inventory Management - GraphQL Server](http://localhost:3000/graphql)    
+7. Open the browser and navigate to [Inventory Management -  Application Home Page](http://localhost:8001/) and insert a record.
+8. GraphQL server [Inventory Management - GraphQL Server](http://localhost:3001/graphql)    
 
 
+query {
+  productsList {
+    name,
+    id,
+    category,
+    image,
+    price
+  }
+}

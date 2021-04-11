@@ -24,12 +24,23 @@ input ProductInputs {
   price: GraphQLPrice
 }
 
+input ProductUpdateInputs {
+  category: CategoryType
+  name: String
+  price: GraphQLPrice
+  image: String
+}
+
 ##### Top level declarations
 type Query {
   about: String!
   productsList: [Product!]!
+  product(id: Int!): Product!
+  
 }
 type Mutation {
   setAboutMessage(message: String!): String
   productsAdd(product: ProductInputs!): Product!
+  productUpdate(id: Int!, changes: ProductUpdateInputs): Product!
+  productDelete(id: Int!): Boolean!
 }

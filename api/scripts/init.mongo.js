@@ -19,6 +19,10 @@ const productsDB = [
   },
 ];
 
+
+db.products.remove({});
+db.deleted_products.remove({});
+
 db.products.insertMany(productsDB);
 const count = db.products.count();
 print("Inserted", count, "products");
@@ -28,3 +32,4 @@ db.products.createIndex({ id: 1 }, { unique: true });
 db.products.createIndex({ category: 1 });
 db.products.createIndex({ name: 1 });
 db.products.createIndex({ image: 1 });
+db.deleted_products.createIndex({ id: 1 }, { unique: true });
