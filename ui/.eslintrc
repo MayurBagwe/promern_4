@@ -1,17 +1,3 @@
 {
-    "extends": "airbnb-base",
-    "env": {
-        "node": true
-    },
-    "rules": {
-        "import/extensions": [
-            "error",
-            "always",
-            {
-                "ignorePackages": true
-            }
-        ],
-        "react/prop-types": "off",
-        "no-console": "off"
-    }
+    "extends": "airbnb-base"
 }

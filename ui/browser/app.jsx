@@ -18,7 +18,7 @@ import { HashRouter as Router } from 'react-router-dom';
 
 //import ProductList from './ProductList.jsx';
 
-import Page from './Page.jsx';
+import Page from '../src/Page.jsx';
 //const element = <ProductList />;
 
 const element = (
