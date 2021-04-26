@@ -4,6 +4,11 @@ import { Link } from 'react-router-dom';
 import graphQLFetch from './graphQLFetch.js';
 import NumInput from './NumInput.jsx';
 import TextInput from './TextInput.jsx';
+import {
+    Col, Panel, Form, FormGroup, FormControl, ControlLabel,
+    ButtonToolbar, Button, Alert,
+} from 'react-bootstrap';
+
 
 /* export default function ProductEdit({ match }) {
     const { id } = match.params;
@@ -18,6 +23,7 @@ export default class ProductEdit extends React.Component {
         super();
         this.state = {
             product: {},
+            showingValidation: false,
         };
         this.onChange = this.onChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,6 +51,7 @@ export default class ProductEdit extends React.Component {
 
     async handleSubmit(e) {
         e.preventDefault();
+        this.showValidation();
         const { product, invalidFields } = this.state;
 
         const query = `mutation productUpdate(
@@ -85,7 +92,15 @@ export default class ProductEdit extends React.Component {
 
     }
 
+    showValidation() {
+        this.setState({ showingValidation: true });
+    }
+    dismissValidation() {
+        this.setState({ showingValidation: false });
+    }
+
     render() {
+        const { invalidFields, showingValidation } = this.state;
         const { product: { id } } = this.state;
         const { match: { params: { id: propsId } } } = this.props;
         if (id == null) {
@@ -102,6 +117,23 @@ export default class ProductEdit extends React.Component {
         const { product: { image } } = this.state;
 
         return (
+            /*  <Panel>
+                 <Panel.Heading>
+                     <Panel.Title>{`Editing Product: ${id}`}</Panel.Title>
+                 </Panel.Heading>
+                 <Panel.Body>
+                     <Form horizontal onSubmit={this.handleSubmit}>
+ 
+ 
+                     </Form>
+ 
+ 
+ 
+ 
+                 </Panel.Body>
+ 
+             </Panel> */
+
             <form onSubmit={this.handleSubmit}>
                 <h3>{`Editing product: ${id}`}</h3>
                 <table>
@@ -110,6 +142,7 @@ export default class ProductEdit extends React.Component {
                             <td>Category:</td>
                             <td>
                                 <select name="category" value={category} onChange={this.onChange}>
+
                                     <option value="Shirts">Shirts</option>
                                     <option value="Jeans">Jeans</option>
                                     <option value="Jackets">Jackets</option>

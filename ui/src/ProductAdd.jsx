@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+    Form, FormControl, FormGroup, ControlLabel, Button,
+} from 'react-bootstrap';
 
 
 export default class AddProduct extends React.Component {
@@ -7,13 +10,17 @@ export default class AddProduct extends React.Component {
         // console.log('Add prod constructor');
         super();
         this.state = { value: '$' };
-
+        this.onChangeStatus = this.onChangeStatus.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
         this.setState({ value: event.target.value });
+    }
+
+    onChangeStatus(e) {
+        this.setState({ status: e.target.value, changed: true });
     }
 
     handleSubmit(e) {
@@ -40,54 +47,65 @@ export default class AddProduct extends React.Component {
         return (
 
             <div>
-                <form name="productAdd" onSubmit={this.handleSubmit}>
-                    <div className="formStyle">
-                        <label htmlFor="category">
-                            Category
-                <br />
-                            <select name="category">
-                                <option>Shirts</option>
-                                <option>Jeans</option>
-                                <option>Jackets</option>
-                                <option>Sweaters</option>
-                                <option>Accessories</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div className="formStyle">
-                        <label htmlFor="price">
-                            Price Per Unit
-                <br />
-                            <input
-                                type="text"
-                                name="price"
-                                value={value}
-                                onChange={this.handleChange}
-                            />
-                        </label>
-                    </div>
+                <Form inline name="productAdd" onSubmit={this.handleSubmit}>
 
-                    <div className="formStyle">
+                    <FormGroup>
+                        <ControlLabel>Category:</ControlLabel>
+                        <FormControl name="category"
+                            componentClass="select"
+                            onChange={this.onChangeStatus}
+                        >
+                            <option value="Jackets">Jackets</option>
+                            <option value="Jeans">Jeans</option>
+                            <option value="Shirts">Shirts</option>
+                            <option value="Sweaters">Sweaters</option>
+                            <option value="Accessories">Accessories</option>
+                        </FormControl>
+
+                    </FormGroup>
+
+                    <FormGroup>
+                        <ControlLabel>Price:</ControlLabel>
+                        {' '}
+                        <FormControl type="text" name="price" value={value} onChange={this.handleChange} />
+                    </FormGroup>
+                    {' '}
+                    <FormGroup>
+                        <ControlLabel>Product Name:</ControlLabel>
+                        {' '}
+                        <FormControl type="text" name="productName" id="product" />
+                    </FormGroup>
+                    <FormGroup>
+                        <ControlLabel>Image URL:</ControlLabel>
+                        {' '}
+                        <FormControl type="text" name="imageURL" id="imageURL" />
+                    </FormGroup>
+                    {' '}
+                    <FormGroup>
+                        <Button bsStyle="primary" type="submit">Add</Button>
+                    </FormGroup>
+
+                    {/* <div className="formStyle">
                         <label htmlFor="productname">
                             ProductName
                 <br />
 
                             <input type="text" name="productName" id="product" />
                         </label>
-                    </div>
-                    <div className="formStyle">
+                    </div> */}
+                    {/* <div className="formStyle">
                         <label htmlFor="image">
                             Image Url
                 <br />
                             <input type="text" name="imageURL" id="imageURL" />
                         </label>
-                    </div>
-                    <div>
+                    </div> */}
+                    {/*  <div>
                         <label htmlFor="addProduct">
                             <input type="submit" value="Add Product" />
                         </label>
-                    </div>
-                </form>
+                    </div> */}
+                </Form>
             </div>
         );
     }

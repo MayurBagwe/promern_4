@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { Button, Glyphicon, Tooltip, OverlayTrigger, Table } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 //const display$ = `$ ${productObj.price}`;
 //const { productObj } = this.props;
 
@@ -7,29 +9,72 @@ const rowStyle = {
     border: '2px solid silver',
     padding: 4,
 };
-const ProductRow = withRouter(({ productObj, deleteProduct, index }) => (
+const ProductRow = withRouter(({ productObj, deleteProduct, index, location: { search } }) => {
 
 
+    const selectLocation = { pathname: `/products/${productObj.id}`, search };
+    const editTooltip = (
+        <Tooltip id="close-tooltip" placement="top">Edit Issue</Tooltip>
+    );
 
+    const deleteTooltip = (
+        <Tooltip id="delete-tooltip" placement="top">Delete Product</Tooltip>
+    );
 
-    <tr>
-        <td style={rowStyle}>{productObj.name}</td>
-        <td style={rowStyle}>${productObj.price}</td>
-        <td style={rowStyle}>{productObj.category}</td>
-        {/* <td style={rowStyle}>
+    function onDelete(e) {
+        e.preventDefault();
+        deleteProduct(index);
+    }
+
+    const tableRow = (
+        <tr>
+            <td style={rowStyle}>{productObj.name}</td>
+            <td style={rowStyle}>${productObj.price}</td>
+            <td style={rowStyle}>{productObj.category}</td>
+            {/* <td style={rowStyle}>
             <a rel="noreferrer" target="_blank" href={productObj.image}>
                 View
             </a>
         </td> */}
-        <td style={rowStyle}>
-            <a rel="noreferrer" href={`/#/view/${productObj.id}`}>
-                View
-            </a>
-        </td>
-        <td style={rowStyle}><a href={`/#/edit/${productObj.id}`}>Edit</a>
-            <button type="button" onClick={() => { deleteProduct(index); }}>Delete</button></td>
-    </tr>
-));
+            <td style={rowStyle}>
+                <LinkContainer to={`/view/${productObj.id}`}>
+
+                    <Button bsSize="xsmall">
+                        <Glyphicon glyph="glyphicon glyphicon-camera" />
+                    </Button>
+
+                </LinkContainer>
+                {/*  <a rel="noreferrer" href={`/#/view/${productObj.id}`}>
+
+                </a> */}
+            </td>
+            <td style={rowStyle}>{/* <a href={`/#/edit/${productObj.id}`}>Edit</a> */}
+
+                <LinkContainer to={`/edit/${productObj.id}`}>
+                    <OverlayTrigger delayShow={1000} overlay={editTooltip}>
+                        <Button bsSize="xsmall">
+                            <Glyphicon glyph="edit" />
+                        </Button>
+                    </OverlayTrigger>
+                </LinkContainer>
+                {' | '}
+
+                <OverlayTrigger delayShow={1000} overlay={deleteTooltip}>
+                    <Button bsSize="xsmall" onClick={onDelete}>
+                        <Glyphicon glyph="trash" />
+                    </Button>
+                </OverlayTrigger>
+
+            </td>
+        </tr >
+    );
+
+    return (
+        <LinkContainer to={selectLocation}>
+            {tableRow}
+        </LinkContainer>
+    );
+});
 
 
 
@@ -40,7 +85,7 @@ export default function ProductTable({ products, deleteProduct }) {
         padding: 4,
         backgroundColor: ' #d9d9d9',
     };
-    //const { products } = this.props;
+    //const {products} = this.props;
     const productRow = products.map((product, index) => (
         <ProductRow
             key={product.id}
@@ -49,7 +94,7 @@ export default function ProductTable({ products, deleteProduct }) {
         />
     ));
     return (
-        <table style={{ borderCollapse: 'collapse' }}>
+        <Table bordered condensed hover responsive>
             <thead>
                 <tr>
                     <th style={rowStyle}>Product Name</th>
@@ -60,7 +105,7 @@ export default function ProductTable({ products, deleteProduct }) {
                 </tr>
             </thead>
             <tbody>{productRow}</tbody>
-        </table>
+        </Table>
     );
 
 }

@@ -4,8 +4,8 @@ import ProductTable from './ProductTable.jsx';
 import AddProduct from './ProductAdd.jsx';
 import graphQLFetch from './graphQLFetch.js'
 import URLSearchParams from 'url-search-params';
-
-
+import { Route } from 'react-router-dom';
+import { Panel } from 'react-bootstrap';
 
 export default class ProductList extends React.Component {
     constructor() {
@@ -92,10 +92,18 @@ export default class ProductList extends React.Component {
         return (
             <React.Fragment>
                 {/* <AppHeader /> */}
-                <h1>My Company Inventory</h1>
+                <Panel>
+                    {/* <Panel.Heading>
+                        <Panel.Title toggle>Filter</Panel.Title>
+                    </Panel.Heading>
+                    <Panel.Body collapsible>
+
+                    </Panel.Body> */}
+
+                </Panel>
                 <p>Showing all available products</p>
                 <ProductTable products={products} deleteProduct={this.deleteProduct} />
-                <hr />
+
                 <h3 style={{ color: 'red' }}>Add a new product to inventory</h3>
                 <AddProduct addProduct={this.addProduct} />
             </React.Fragment>
