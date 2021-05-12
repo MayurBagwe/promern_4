@@ -968,16 +968,17 @@ var ProductList = /*#__PURE__*/function (_React$Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                this.loadCount();
                 search = this.props.location.search;
                 params = new url_search_params__WEBPACK_IMPORTED_MODULE_4___default.a(search);
                 vars = {};
                 if (params.get('category')) vars.status = params.get('category'); // constructing a GraphQL query
 
                 query = "query{\n            productsList{\n              id name price \n              category image\n            }\n          }";
-                _context.next = 7;
+                _context.next = 8;
                 return Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_3__["default"])(query, vars);
 
-              case 7:
+              case 8:
                 data = _context.sent;
 
                 if (data) {
@@ -987,7 +988,7 @@ var ProductList = /*#__PURE__*/function (_React$Component) {
                   });
                 }
 
-              case 9:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -1002,25 +1003,25 @@ var ProductList = /*#__PURE__*/function (_React$Component) {
       return loadData;
     }()
   }, {
-    key: "addProduct",
+    key: "loadCount",
     value: function () {
-      var _addProduct = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(product) {
+      var _loadCount = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
         var query, data;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                query = "mutation productsAdd($product: ProductInputs!) {\n        productsAdd(product: $product) {\n          id\n        }\n      }";
+                query = "query {\n          productCount\n        }";
                 _context2.next = 3;
-                return Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_3__["default"])(query, {
-                  product: product
-                });
+                return Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_3__["default"])(query, this.showError);
 
               case 3:
                 data = _context2.sent;
 
                 if (data) {
-                  this.loadData();
+                  this.setState({
+                    count: data.productCount
+                  });
                 }
 
               case 5:
@@ -1029,6 +1030,42 @@ var ProductList = /*#__PURE__*/function (_React$Component) {
             }
           }
         }, _callee2, this);
+      }));
+
+      function loadCount() {
+        return _loadCount.apply(this, arguments);
+      }
+
+      return loadCount;
+    }()
+  }, {
+    key: "addProduct",
+    value: function () {
+      var _addProduct = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(product) {
+        var query, data;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                query = "mutation productsAdd($product: ProductInputs!) {\n        productsAdd(product: $product) {\n          id\n        }\n      }";
+                _context3.next = 3;
+                return Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_3__["default"])(query, {
+                  product: product
+                });
+
+              case 3:
+                data = _context3.sent;
+
+                if (data) {
+                  this.loadData();
+                }
+
+              case 5:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
       }));
 
       function addProduct(_x) {
@@ -1040,24 +1077,24 @@ var ProductList = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "deleteProduct",
     value: function () {
-      var _deleteProduct = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(index) {
+      var _deleteProduct = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(index) {
         var query, products, _this$props, _this$props$location, pathname, search, history, id, data;
 
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 query = "mutation productDelete($id: Int!) {\n          productDelete(id: $id)\n        }";
                 products = this.state.products;
                 _this$props = this.props, _this$props$location = _this$props.location, pathname = _this$props$location.pathname, search = _this$props$location.search, history = _this$props.history;
                 id = products[index].id;
-                _context3.next = 6;
+                _context4.next = 6;
                 return Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_3__["default"])(query, {
                   id: id
                 });
 
               case 6:
-                data = _context3.sent;
+                data = _context4.sent;
 
                 if (data && data.productDelete) {
                   this.setState(function (prevState) {
@@ -1079,12 +1116,14 @@ var ProductList = /*#__PURE__*/function (_React$Component) {
                   this.loadData();
                 }
 
-              case 8:
+                this.loadCount();
+
+              case 9:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee4, this);
       }));
 
       function deleteProduct(_x2) {
@@ -1096,8 +1135,12 @@ var ProductList = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var products = this.state.products;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["Panel"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Showing all available products"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ProductTable_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      var _this$state = this.state,
+          products = _this$state.products,
+          count = _this$state.count;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["Panel"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["Panel"].Heading, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["Panel"].Title, {
+        toggle: true
+      }, "Showing", ' ', count, ' ', "available products"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ProductTable_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
         products: products,
         deleteProduct: this.deleteProduct
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {

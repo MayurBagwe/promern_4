@@ -32,10 +32,11 @@ export default class ProductList extends React.Component {
     }
 
     async loadData() {
-
+        this.loadCount();
         const { location: { search } } = this.props;
         const params = new URLSearchParams(search);
         const vars = {};
+
         if (params.get('category')) vars.status = params.get('category');
         // constructing a GraphQL query
         const query = `query{
@@ -49,6 +50,17 @@ export default class ProductList extends React.Component {
         if (data) {
             //    console.log('Final data ', data);
             this.setState({ products: data.productsList });
+        }
+    }
+
+
+    async loadCount() {
+        const query = `query {
+          productCount
+        }`;
+        const data = await graphQLFetch(query, this.showError);
+        if (data) {
+            this.setState({ count: data.productCount });
         }
     }
 
@@ -85,10 +97,11 @@ export default class ProductList extends React.Component {
         } else {
             this.loadData();
         }
+        this.loadCount();
     }
 
     render() {
-        const { products } = this.state;
+        const { products, count } = this.state;
         return (
             <React.Fragment>
                 {/* <AppHeader /> */}
@@ -99,9 +112,18 @@ export default class ProductList extends React.Component {
                     <Panel.Body collapsible>
 
                     </Panel.Body> */}
+                    <Panel.Heading>
+                        <Panel.Title toggle>
+                            Showing
+                            {' '}
+                            {count}
+                            {' '}
+              available products
+                        </Panel.Title>
+                    </Panel.Heading>
 
                 </Panel>
-                <p>Showing all available products</p>
+                {/*   <p>Showing all available products</p> */}
                 <ProductTable products={products} deleteProduct={this.deleteProduct} />
 
                 <h3 style={{ color: 'red' }}>Add a new product to inventory</h3>

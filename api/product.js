@@ -101,4 +101,19 @@ async function remove(_, { id }) {
     return false;
 }
 
-module.exports = { list, add, get, update, delete: remove, };
+
+async function counts() {
+    const db = getDb();
+    const result = await db.collection('products').aggregate([
+        {
+            $group: {
+                _id: null,
+                count: { $sum: 1 },
+            },
+        },
+    ]).toArray();
+
+    return result[0].count;
+}
+
+module.exports = { list, add, get, update, delete: remove, counts };
